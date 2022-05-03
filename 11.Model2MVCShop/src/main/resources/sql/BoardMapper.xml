@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardMapper">
+
+	<resultMap id="boardSelectMap" type="board">
+		<result property="boardNo" column="board_no" jdbcType="NUMERIC" />
+		<result property="boardTitle" column="board_title" jdbcType="VARCHAR" />
+		<result property="boardCategory" column="baord_coategory" jdbcType="VARCHAR" />
+		<result property="boardContent" column="board_contents" jdbcType="VARCHAR" />
+		<result property="createAt" column="create_at" jdbcType="DATE" />
+		<result property="updateAt" column="update_at" jdbcType="DATE" />
+		<result property="status" column="status" jdbcType="CHAR" />
+		<result property="userId" column="user_id" jdbcType="VARCHAR" />
+		<result property="region" column="region" jdbcType="VARCHAR" />		
+	</resultMap>
+	
+	<!-- INSERT -->
+	<insert id="addBoard" parameterType="board">
+		INSERT
+		INTO board
+		VALUES((seq_board_board_no.NEXTVAL), #{userId:VARCHAR}, #{boardTitle:VARCHAR},#{boardContent:VARCHAR},
+		        #{boardCategory:VARCHAR},#{region:VARCHAR}, SYSDATE,SYSDATE,#{status})
+		<selectKey keyProperty="boardNo" resultType="Integer" order="AFTER">
+			SELECT seq_board_board_no.currval FROM dual
+		</selectKey>
+	</insert>
+	
+	<!-- SELECT ONE -->
+	<select id="getBoard" parameterType="user" resultMap="boardSelectMap">
+		SELECT *
+		FROM board
+		<if test="addr !=null">		
+			<where>
+				region = #{addr}
+			</where>
+		</if>
+		ORDER BY create_at
+	</select>
+	
+	<select id="oneBoard" parameterType="int" resultMap="boardSelectMap">
+		SELECT *
+		FROM board
+		WHERE board_no = #{value}
+	</select>
+	
+	<!-- UPDATE -->
+	<update id="updateBoard" parameterType="board">
+		UPDATE board
+		<set>
+			board_title=#{boardTitle:VARCHAR},
+			baord_contents =#{boardContent:VARCHAR},
+			baord_coategory=#{boardCategory:VARCHAR},
+			update_at =SYSDATE
+		</set>
+		WHERE board_no = #{boardNo}
+	</update>
+	
+	<!-- UPDATE STATUS -->
+	<update id="updateStatusBoard" parameterType="board">
+		UPDATE board
+		<set>
+			status = #{status}
+		</set>
+		WHERE board_no = #{boardNo}
+	</update>	
+	
+</mapper>

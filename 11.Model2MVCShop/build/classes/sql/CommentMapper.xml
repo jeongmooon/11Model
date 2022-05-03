@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommentMapper">
+
+	<resultMap id="commentSelectMap" type="comment">
+		<result property="bcNo" column="bc_no" jdbcType="NUMERIC" />
+		<result property="userId" column="user_id" jdbcType="VARCHAR" />
+		<result property="boardNo" column="board_no" jdbcType="NUMERIC" />
+		<result property="contents" column="contents" jdbcType="VARCHAR" />
+		<result property="commnetGroup" column="comment_group" jdbcType="NUMERIC" />
+		<result property="cmlayer" column="cmlayer" jdbcType="NUMERIC" />
+		<result property="createAt" column="create_at" jdbcType="DATE" />
+		<result property="updateAt" column="update_at" jdbcType="DATE" />
+		<result property="status" column="status" jdbcType="CHAR" />	
+	</resultMap>
+	
+	<!-- INSERT -->
+	<insert id="addComment" parameterType="comment">
+		INSERT
+		INTO boardComment
+		VALUES((seq_boardComment_bc_no.NEXTVAL),#{boardNo},#{userId},#{contents},#{commnetGroup},
+			#{cmlayer},SYSDATE,SYSDATE,#{status})
+	</insert>
+	
+	<!-- SELECT ONE -->
+	<select id="getComment" parameterType="int" resultMap="commentSelectMap">
+		SELECT *
+		FROM boardComment
+		WHERE board_no = #{value}
+		ORDER BY comment_group
+	</select>
+	
+	<!-- UPDATE -->
+	<update id="updateComment" parameterType="comment">
+		UPDATE boardComment
+		<set>
+			contents=#{contents},
+			update_at=SYSDATE
+		</set>
+		WHERE bc_no =#{bcNo}
+	</update>
+	
+	<!-- UPDATE STATUS -->
+	<update id="updateStatusComment" parameterType="comment">
+		UPDATE boardComment
+		<set>
+			status = #{status}
+		</set>
+		WHERE bc_no =#{bcNo}
+	</update>	
+	
+</mapper>

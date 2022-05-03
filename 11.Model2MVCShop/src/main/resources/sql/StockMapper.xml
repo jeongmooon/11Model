@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="StockMapper">
+	<resultMap type="stock" id="stockSelectMap">
+		<result property="prodNo" column="prod_no" jdbcType="NUMERIC" />
+		<result property="stock" column="sotck" jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<!-- SELECT -->
+	<select id="getStockList" parameterType="map" resultMap="stockSelectMap">
+		SELECT NVL(stock,0) stock
+		FROM product_stock
+		WHERE 
+			<if test="#{total}==1">
+				prod_no = #{prodNo0}
+			</if>
+			<if test="#{total}>1">
+				<foreach collection="list" item="value" separator="OR" >
+					prod_no = #{value}
+				</foreach>
+			</if>
+	</select>
+	
+	<!-- UPDATE -->
+	<update id="updateStock" parameterType="stock">
+		MERGE INTO product_stock
+		USING dual
+		ON (prod_no=#{prodNo})
+		WHEN MATCHED THEN UPDATE SET 
+			<if test="status == 0">
+				stock = stock + #{stock}
+			</if>
+			<if test="status==1">
+				stock = stock - #{stock}
+			</if>
+		WHEN NOT MATCHED THEN INSERT (prod_no,stock) VALUES (#{prodNo},#{stock})
+	</update>
+</mapper>

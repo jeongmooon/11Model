@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardImgMapper">
+
+	<resultMap id="boardImgSelectMap" type="boardImg">
+		<result property="bdImgNo" column="bdimg_no" jdbcType="NUMERIC" />
+		<result property="boardNo" column="board_no" jdbcType="NUMERIC" />
+		<result property="createAt" column="create_at" jdbcType="DATE" />
+		<result property="updateAt" column="update_at" jdbcType="DATE" />
+		<result property="imgURL" column="imgURL" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- INSERT -->
+	<insert id="addBoardImg" parameterType="boardImg">
+		INSERT
+		INTO boardimg
+		VALUES((seq_boardImg_bdimg_no.NEXTVAL), #{boardNo}, SYSDATE, SYSDATE, #{imgURL})
+	</insert>
+	
+	<!-- SELECT ONE -->
+	<select id="getBoardImg" parameterType="boardImg" resultMap="boardImgSelectMap">
+		SELECT *
+		FROM boardimg
+		WHERE board_no = #{boardNo}
+		ORDER BY create_at
+	</select>
+	
+	
+	<!-- UPDATE -->
+	<update id="updateBoardImg" parameterType="boardImg">
+		UPDATE boardimg
+		<set>
+			imgURL=#{imgURL},
+			update_at =SYSDATE
+		</set>
+		WHERE board_no = #{boardNo}
+	</update>
+	
+	
+</mapper>
