@@ -47,32 +47,7 @@ public class ProductRestController {
 		System.out.println("/product/json/getProduct : GET");
 		
 		return productService.getProduct(prodNo);
-	}
-	
-	//@PostMapping("proudct/addProduct")
-	@RequestMapping(value="json/addProduct", method=RequestMethod.POST)
-	public Product addProduct(@RequestBody Product product, @RequestPart(value="file",required = false) MultipartFile file) throws Exception {
-		System.out.println("/product/json/addPrudct : POST");
-		System.out.println(" :: "+ product);
-		
-		product.setManuDate(product.getManuDate().replace("-", ""));
-		
-		if(file !=null) {
-			String projectPath = "C:\\workspace\\07.Model2MVCShop(URI,pattern)\\src\\main\\webapp\\images\\uploadFiles";
-			UUID uuid = UUID.randomUUID();
-			String fileName = uuid+"_"+file.getOriginalFilename();
-			File saveFile = new File(projectPath,fileName);
-					
-			file.transferTo(saveFile);
-			product.setFileName(fileName);
-		}
-		
-		System.out.println(product);
-		productService.addProduct(product);
-		
-		return product;
-	}
-	
+	}	
 	
 	//@RequestMapping(value="json/listProduct")
 	@GetMapping(value="json/listProduct")

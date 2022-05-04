@@ -55,8 +55,8 @@
 		})
 		
 		$(".ptitle").on("click",function (){			
-			const boardNo = $(this).data("value");
-			self.location = "/board/getBoard?boardNo="+boardNo;
+			const prodNo = $(this).data("value");
+			self.location = "/product/getProduct?prodNo="+prodNo;
 		})
 		
 		$(".productList").on("click",function(){
@@ -123,12 +123,13 @@
         		</c:forEach>	
         	</div>
         	<div class="col-md-6" style="text-align:center;">
+       	${product }
         		<h1 class="productList" style="border-bottom:3px solid #001D6E;">우리동네 판매정보</h1>
         		<c:forEach var="product" items="${list }">
         			<c:set var="i" value="${ i+1 }" />
         			<div style="display:flex; justify-content: space-between;">
         				<span class="ptitle" id="prodId" data-value="${product.prodNo}">${product.prodName}</span>
-        				<span>${product.createAt }</span>
+        				<span>${product.regDate }</span>
         			</div>
         		</c:forEach>  
         	</div>

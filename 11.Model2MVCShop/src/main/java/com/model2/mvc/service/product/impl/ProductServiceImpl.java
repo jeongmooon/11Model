@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,8 +44,20 @@ public class ProductServiceImpl implements ProductService {
 	
 	
 	@Override
-	public void addProduct(Product product) throws Exception {
+	public void addProduct(Product product,MultipartFile file) throws Exception {
 		// TODO Auto-generated method stub
+		if(file != null) {
+			String projectPath = "C:\\Users\\bitcamp\\git\\11Model\\11.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles";		
+			String originName = file.getOriginalFilename();
+			
+			UUID uuid = UUID.randomUUID();
+			String fileName = uuid+"_"+originName;
+			
+			File saveFile = new File(projectPath,fileName);
+			file.transferTo(saveFile);
+			product.setFileName(fileName);
+		}
+		
 		
 		productDao.addProdcut(product);
 	}
@@ -69,8 +82,30 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void updateProduct(Product product,Stock stock) throws Exception {
-		// TODO Auto-generated method stub
+	public void updateProduct(Product product,Stock stock,MultipartFile file) throws Exception {
+		// TODO Auto-generated method stub		
+		
+		if(file.getOriginalFilename() !=null) {
+			String projectPath = "C:\\Users\\bitcamp\\git\\11Model\\11.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles";
+			File oldFile = new File(projectPath+"\\"+product.getFileName());
+			
+			if(oldFile.exists()) {
+				oldFile.delete();
+			}
+			
+			String originName = file.getOriginalFilename();
+			
+			UUID uuid = UUID.randomUUID();
+			String fileName = uuid+"_"+originName;
+			
+			File saveFile = new File(projectPath,fileName);
+			file.transferTo(saveFile);
+			product.setFileName(fileName);
+		}
+		
+		stock.setStatus(0);
+		
+		
 		productDao.updateProduct(product);
 		//System.out.println(stock);
 		stockDao.updateStock(stock);

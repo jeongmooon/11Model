@@ -37,6 +37,14 @@
             color:white;
     }
 </style>
+<script>
+	$(function(){
+		$(".title").on("click",function (){			
+			const boardNo = $(this).data("value");
+			self.location = "/board/getBoard?boardNo="+boardNo;
+		})
+	})
+</script>
 <div id="test">
 	<c:forEach var="board" items="${board}">
 		<c:set var="i" value="${ i+1 }" />

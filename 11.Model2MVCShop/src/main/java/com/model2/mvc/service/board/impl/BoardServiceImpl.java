@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.model2.mvc.service.board.BoardDao;
 import com.model2.mvc.service.board.BoardService;
+import com.model2.mvc.service.comment.CommentDao;
 import com.model2.mvc.service.domain.Board;
+import com.model2.mvc.service.domain.Comment;
 import com.model2.mvc.service.domain.User;
 
 @Service("boardServiceImpl")
@@ -16,6 +18,10 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	@Qualifier("boardDaoImpl")
 	private BoardDao boardDao;
+	
+	@Autowired
+	@Qualifier("commentDaoImpl")
+	private CommentDao commentDao;
 	
 	public BoardServiceImpl() {
 		// TODO Auto-generated constructor stub
@@ -49,7 +55,10 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board oneBoard(int boardNo) throws Exception {
 		// TODO Auto-generated method stub
-		return boardDao.oneBoard(boardNo);
+		Board board = boardDao.oneBoard(boardNo);
+		List<Comment> comment = commentDao.getComment(boardNo);
+		board.setComment(comment);
+		return board;
 	}
 
 }

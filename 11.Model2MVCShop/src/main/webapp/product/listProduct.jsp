@@ -37,6 +37,15 @@
 			font-family: 'GmarketSansMedium';
 			padding-top : 100px;
 		}
+		.addBtn{
+	    	display:flex;
+	    	background-color:#001D6E;
+	    	width:50px;
+	    	height:50px;
+	    	border-radius:100%;
+	    	justify-content:center;
+	    	align-items:center;	    	
+	    }
 	</style>
 <script type="text/javascript">
 	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용
@@ -100,9 +109,12 @@
 			minLength: 1,// 최소 글자수
 			delay: 100,	
 		}); 
-		  
-        
 		
+		$( ".addBtn" ).on("click" , function() {
+	 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			$(self.location).attr("href","/product/addProductView.jsp");
+		});
+		  	
 		
 		$(function(){
 			$('.list-group').children('.list-group-item').on('click',function(){
@@ -180,8 +192,13 @@
 			<jsp:include page="productCard.jsp" />
 		</div>
 	</div>
-	<div class="col-md-3">
-	</div>
+	<c:if test="user.role = admin">
+		<div class="col-md-2" style="position: fixed; right: 5%; bottom: 5%;">
+			<div class="addBtn">
+				<h1 style="color:#fff; font-size:50px;">+</h1>
+			</div>
+		</div>
+	</c:if>
 </div>
 
 

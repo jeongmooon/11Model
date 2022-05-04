@@ -1,5 +1,7 @@
 package com.model2.mvc.web.user;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.board.BoardService;
+import com.model2.mvc.service.domain.Board;
 import com.model2.mvc.service.domain.User;
+import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.user.UserService;
 
 
@@ -30,6 +35,14 @@ public class UserController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
+	
+	@Autowired
+	@Qualifier("boardServiceImpl")
+	private BoardService boardService;
+	
+	@Autowired
+	@Qualifier("productServiceImpl")
+	private ProductService productService;
 	//setter Method 구현 않음
 		
 	public UserController(){
@@ -95,7 +108,7 @@ public class UserController {
 		String sessionId=((User)session.getAttribute("user")).getUserId();
 		if(sessionId.equals(user.getUserId())){
 			session.setAttribute("user", user);
-		}
+		}		
 		
 		return "redirect:/user/getUser?userId="+user.getUserId();
 	}
@@ -110,7 +123,7 @@ public class UserController {
 	}
 	
 	@RequestMapping( value="login", method=RequestMethod.POST )
-	public String login(@ModelAttribute("user") User user , HttpSession session ) throws Exception{
+	public String login(@ModelAttribute("user") User user ,@ModelAttribute("search") Search search ,Model model, HttpSession session ) throws Exception{
 		
 		System.out.println("/user/login : POST");
 		//Business Logic
@@ -122,7 +135,29 @@ public class UserController {
 		
 		System.out.println(user);
 		
-		return "redirect:/index.jsp";
+		List<Board> board = boardService.getBoard(dbUser);		
+		
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		
+		search.setSearchCondition("0");
+		search.setPageSize(pageSize);
+		
+		Map<String , Object> map = new HashMap<>();
+		map.put("search", search);
+		map.put("user", dbUser);
+		
+		System.out.println(board);
+		
+		map = productService.getProductList(search);
+		
+		System.out.println(map.get("list"));
+		
+		model.addAttribute("board", board);
+		model.addAttribute("list",map.get("list"));
+		
+		return "/index.jsp";
 	}
 		
 	

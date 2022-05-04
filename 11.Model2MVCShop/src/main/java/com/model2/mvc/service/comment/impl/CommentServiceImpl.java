@@ -24,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public void addComment(Comment comment) throws Exception {
 		// TODO Auto-generated method stub
+		
 		commentDao.addComment(comment);
 	}
 

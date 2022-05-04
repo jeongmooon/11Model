@@ -9,7 +9,7 @@
 <div class="navbar  navbar-inverse navbar-fixed-top">
 	
 	       
-		<a class="navbar-brand" href="/index.jsp">Model2 MVC</a>
+		<a class="navbar-brand" href="/main">Model2 MVC</a>
 		
 		<!-- toolBar Button Start //////////////////////// -->
 		<div class="navbar-header">

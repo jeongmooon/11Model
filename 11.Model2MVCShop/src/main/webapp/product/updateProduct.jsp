@@ -1,167 +1,152 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<title>상품 정보 수정</title>
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../javascript/calendar.js"></script>
+<title>상품등록</title>
 
-<script type="text/javascript">	
-	$(()=>{
-		$( ".ct_btn01:contains('수정')" ).on("click" , function() {
-			$("form").attr("method","post").attr("action","/product/updateProduct").attr("enctype","multipart/form-data").submit();
-		});
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+       	@font-face {
+		    font-family: 'GmarketSansMedium';
+		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+		    font-weight: normal;
+		    font-style: normal;
+		}
 		
-		$( ".ct_btn01:contains('취소')" ).on("click" , function() {
-			history.go(-1);
-		});		
-		
-	})
+		body {
+			font-family: 'GmarketSansMedium';
+			padding-top : 100px;
+		}
+    </style>
+<script type="text/javascript" src="../javascript/calendar.js">
 </script>
-</head>
-<body bgcolor="#ffffff" text="#000000">
+<script type="text/javascript">
+	const fncAddProduct = () =>{
+	const name = $("input[name='prodName']").val();
+	const detail = $("#prodDetail").val();
+	const manuDate = $("input[name='manuDate']").val();
+	const price = $("input[name='price']").val();
+	
+	if(name == null || name.length<1){
+		alert("상품명은 반드시 입력하여야 합니다.");
+		return;
+	}
+	if(detail == null || detail.length<1){
+		alert("상품상세정보는 반드시 입력하여야 합니다.");
+		return;
+	}
+	if(manuDate == null || manuDate.length<1){
+		alert("제조일자는 반드시 입력하셔야 합니다.");
+		return;
+	}
+	if(price == null || price.length<1){
+		alert("가격은 반드시 입력하셔야 합니다.");
+		return;
+	}
+	
+	$("form").attr("method","POST").attr("action","/product/updateProduct").attr("enctype","multipart/form-data").submit();
+}
 
-	<form name="detailForm">
-	
-	<input type="hidden" name="prodNo" value="${product.prodNo}">
-	
-	<table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<td width="15" height="37">
-				<img src="/images/ct_ttl_img01.gif" width="15" height="37">
-			</td>
-			<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0">
-					<tr>
-						<td width="93%" class="ct_ttl01">상품수정</td>
-						<td width="20%" align="right">&nbsp;</td>
-					</tr>
-				</table>
-			</td>
-			<td width="12" height="37"><img src="/images/ct_ttl_img03.gif" width="12" height="37"></td>
-		</tr>
-	</table>
-	
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:13px;">
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>	
-		<tr>
-			<td width="104" class="ct_write">
-				상품명 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-			</td>
-			<td bgcolor="D6D6D6" width="1"></td>
-			<td class="ct_write01">
-				<input type="text" name="prodName" value="${product.prodName}" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="50" >
-			</td>
-		</tr>
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>
-		<tr>
-			<td width="104" class="ct_write">
-				상품상세정보 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-			</td>
-			<td bgcolor="D6D6D6" width="1"></td>
-			<td class="ct_write01">
-				<input type="text" name="prodDetail" value="${product.prodDetail}" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="50" >
-			</td>
-		</tr>
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>
-		<tr>
-			<td width="104" class="ct_write">
-				제조일자 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-			</td>
-			<td bgcolor="D6D6D6" width="1"></td>
-			<td class="ct_write01">
-			<input type="text" name="manuDate" readonly="readonly" class="ct_input_g"  value="${product.manuDate}"
-						style="width: 100px; height: 19px"	maxLength="10" minLength="6"/>
-				&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15" 
-										onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)"/>
-			</td>
-		</tr>
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>
-		<tr>
-			<td width="104" class="ct_write">
-				가격 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-			</td>
-			<td bgcolor="D6D6D6" width="1"></td>
-			<td class="ct_write01">
-				<input type="text" name="price" value="${product.price}" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="50" >
-			</td>
-		</tr>
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>
-		<tr>
-			<td width="104" class="ct_write">
-				재고 추가 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-			</td>
-			<td bgcolor="D6D6D6" width="1"></td>
-			<td class="ct_write01">
-				<input type="text" name="stock" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="50" >
-			</td>
-		</tr>
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>
-		<tr>
-			<td width="104" class="ct_write">
-				상품이미지 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle">
-			</td>
-			<td bgcolor="D6D6D6" width="1"></td>
-			<td class="ct_write01">
-				<input type="file" name="file" >
-				<input type="hidden" name ="fileName" value="${product.fileName}" />
-			</td>
-		</tr>
-		<tr>
-			<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-		</tr>
-	</table>
-	
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-		<tr>
-			<td width="53%"></td>
-			<td align="right">
-				<table border="0" cellspacing="0" cellpadding="0">
-					<tr>
-						<td width="17" height="23">
-							<img src="/images/ct_btnbg01.gif" width="17" height="23">
-						</td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-							수정
-						</td>
-						<td width="14" height="23">
-							<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-						</td>
-						<td width="30"></td>					
-						<td width="17" height="23">
-							<img src="/images/ct_btnbg01.gif" width="17" height="23">
-						</td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-							취소
-						</td>
-						<td width="14" height="23">
-							<img src="/images/ct_btnbg03.gif" width="14" height="23">
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
+	$(function() {
+		$("button.btn.btn-primary").on("click" , function() {
+			fncAddProduct();
+		});
+	 
+		$("a[href='#' ]").on("click" , function() {
+			$("form")[0].reset();
+		});			
+	});
+
+	function readURL(input) {
+	if (input.files && input.files[0]) {
+		const reader = new FileReader();
+		reader.onload = function(e) {
+			document.getElementById('preview').src = e.target.result;
+		};
+		reader.readAsDataURL(input.files[0]);
+	} else {
+		document.getElementById('preview').src = "";
+	}
+}
+
+
+</script>
+
+</head>
+
+<body bgcolor="#ffffff" text="#000000">
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+<div class="container">
+	<form class="form-horizontal">
+		<input type="hidden" name="prodNo" value="${product.prodNo}" />
+		<div class="form-group">
+			<label for="prodName" class="col-sm-offset-1 col-sm-3 control-label">상품명</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" id="prodName" name="prodName" placeholder="상품명" value="${product.prodName }">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="prodDetail" class="col-sm-offset-1 col-sm-3 control-label">상품상세정보</label>
+			<div class="col-sm-4">
+				<textarea type="text" class="form-control" id="prodDetail" name="prodDetail" placeholder="상품상세설명">${product.prodDetail }</textarea>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="manuDate" class="col-sm-offset-1 col-sm-3 control-label">제조일자</label>
+			<div class="col-sm-4">
+				<input type="date" class="form-control" name="manuDate" value="${product.regDate }">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="price" class="col-sm-offset-1 col-sm-3 control-label">가격</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" name="price" placeholder="원" value="${product.price }">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="stock" class="col-sm-offset-1 col-sm-3 control-label">추가 재고</label>
+			<div class="col-sm-4">
+				<input type="number" class="form-control" name="stock" value="0">
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="stock" class="col-sm-offset-1 col-sm-3 control-label">상품이미지</label>
+			<div class="col-sm-4">				
+				<input type="file" name="file" multiple="multiple" required="required" class="file" onchange="readURL(this);" />
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="stock" class="col-sm-offset-1 col-sm-3 control-label">미리보기</label>
+			<div class="col-sm-4">				
+				<img id="preview" style="width:200px; height:200px;" src="../images/uploadFiles/${product.fileName}">
+			</div>
+		</div>		
+		
+		<div class="form-group">
+			<div class="col-sm-offset-4  col-sm-4 text-center">
+				<button type="button" class="btn btn-primary"  >수정</button>
+				<a class="btn btn-primary btn" href="#" role="button">취소</a>
+			</div>
+		</div>
 	</form>
+</div>
 </body>
 </html>

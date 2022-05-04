@@ -65,50 +65,15 @@ public class ProductController {
 	
 	//@RequestMapping("/addProduct.do")
 	@RequestMapping(value="addProduct", method = RequestMethod.POST)
-	public String addProduct(@ModelAttribute("product") Product product,MultipartHttpServletRequest mRequest,MultipartFile file) throws Exception{
-		System.out.println("/addProduct");
-		System.out.println(file);
-		System.out.println("\n\n"+mRequest+"\n\n");
-		product.setManuDate(product.getManuDate().replace("-", ""));
-		String projectPath = "C:\\workspace\\11.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles";		
-		
-		List<MultipartFile> fileList = mRequest.getFiles("file");
-		
-		for(MultipartFile mf : fileList) {
-			String originName = mf.getOriginalFilename();
-			long fileSize = mf.getSize();
-			
-			System.out.println("원본이름 : "+ originName);
-			System.out.println("파일사이즈 : "+fileSize);
-			
-			UUID uuid = UUID.randomUUID();
-			String fileName = uuid+"_"+originName;
-			
-			File saveFile = new File(projectPath,fileName);
-			mf.transferTo(saveFile);
-			product.setFileName(fileName);
-		}		
+	public String addProduct(@ModelAttribute("product") Product product,MultipartFile file) throws Exception{
+		System.out.println("/addProduct");		
 		
 		System.out.println(product);
-		productService.addProduct(product);
-		return "forward:/product/addProduct.jsp";
-	}
-	
-	// 인코딩이안되잇음을 의미함
-	@PostMapping(value="image",consumes = {"multipart/form-data"})
-	public void addImage( @RequestParam(value="file", required = false) MultipartFile file,MultipartHttpServletRequest request) throws Exception{
-		System.out.println("Teststst");
-		System.out.println("fukekeile  >>>."+file);
+		productService.addProduct(product,file);
 		
-		String projectPath = System.getProperty("user.dir")+ "\\src\\main\\webapp\\images\\uploadFiles";
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid+"_"+file.getOriginalFilename();
-		File saveFile = new File(projectPath,fileName);
-		
-		file.transferTo(saveFile);
-		System.out.println(saveFile);
+		return "redirect:/product/listProduct?searchValue=0";
 	}
-	
+		
 	//@RequestMapping("/getProduct.do")
 	@RequestMapping(value="getProduct",method=RequestMethod.GET)
 	public String getProduct(@RequestParam("prodNo") int prodNo, Model model, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -168,38 +133,11 @@ public class ProductController {
 	
 	//@RequestMapping("/updateProduct.do")
 	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
-	public String updateProduct(@ModelAttribute("product") Product product,@ModelAttribute("stock")Stock stock,MultipartHttpServletRequest mRequest ,Model model,MultipartFile file) throws Exception{
+	public String updateProduct(@ModelAttribute("product") Product product,@ModelAttribute("stock")Stock stock,Model model,MultipartFile file) throws Exception{
 		System.out.println("/updateProduct");
-		System.out.println(product);
-		
-		String projectPath = "C:\\workspace\\09.Model2MVCShop(jQuery)\\src\\main\\webapp\\images\\uploadFiles";
-		if(file !=null) {
-			File oldFile = new File(projectPath+"\\"+product.getFileName());
-			if(oldFile.exists()) {
-				oldFile.delete();
-			}
-		}
-		
-		List<MultipartFile> fileList = mRequest.getFiles("file");
-		
-		for(MultipartFile mf : fileList) {
-			String originName = mf.getOriginalFilename();
-			long fileSize = mf.getSize();
-			
-			System.out.println("원본이름 : "+ originName);
-			System.out.println("파일사이즈 : "+fileSize);
-			
-			UUID uuid = UUID.randomUUID();
-			String fileName = uuid+"_"+originName;
-			
-			File saveFile = new File(projectPath,fileName);
-			mf.transferTo(saveFile);
-			product.setFileName(fileName);
-		}	
 		
 		
-		stock.setStatus(0);
-		productService.updateProduct(product,stock);
+		productService.updateProduct(product,stock,file);
 		
 		System.out.println(product.getProdNo());
 		
